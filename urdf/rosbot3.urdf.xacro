@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+    <camera_name>rosbot3_cam</camera_name>
+    <image_topic_name>image_raw</image_topic_name>
+    <info_topic_name>camera_info</info_topic_name>
+    </plugin>
+    </sensor>
+    </gazebo>
+
+    <gazebo reference="lidar_link">
+        <sensor type="ray" name="hokuyo_like">
+            <update_rate>20</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-1.5708</min_angle>
+                        <max_angle>1.5708</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.05</min>
+                    <max>10.0</max>
+                </range>
+            </ray>
+            <plugin name="ray_controller" filename="libgazebo_ros_laser.so">
+                <topicName>/scan</topicName>
+                <frameName>lidar_link</frameName>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+    <!-- A minimal differential drive transmission (note: integration with ros2_control requires additional config) -->
+    <transmission name="left_wheel_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="left_wheel_joint"/>
+        <actuator name="left_motor"/>
+    </transmission>
+
+    <transmission name="right_wheel_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="right_wheel_joint"/>
+        <actuator name="right_motor"/>
+    </transmission>
+
+    <!-- Insert more detailed joints and collision geometry as needed -->
+
+</robot>
