@@ -2,29 +2,28 @@
 
 <!--
   Description of the ROSBOT3 robot.
-  Author: Vito Rodrigues Franzosi
+  Autor original: Helio Perroni Filho
+  Adaptado por: Vito Rodrigues Franzosi
   Date: 06.11.2025
 -->
 
 <robot name="rosbot3" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:include filename="$(find rosbot3_description)/urdf/ugv02.xacro"/>
 
-  <xacro:property name="payload_base_length" value="${200.0 * M}"/> <!-- comprimento da base para sensores -->
-  <xacro:property name="payload_base_width" value="${223.0 * M}"/> <!-- largura da base para sensores -->
-  <xacro:property name="payload_base_height" value="${1.0 * M}"/> <!-- altura da base para sensores -->
+  <xacro:property name="payload_base_length" value="${156.22 * M}"/>
+  <xacro:property name="payload_base_width" value="${159.96 * M}"/>
+  <xacro:property name="payload_base_height" value="${42.7 * M}"/>
 
-  <xacro:property name="lidar_radius" value="${10.0 * M}"/> <!-- raio do cilindro do LiDAR -->
-  <xacro:property name="lidar_height" value="${38.0 * M}"/> <!-- altura do LiDAR -->
+  <xacro:property name="lidar_side" value="${45.61 * M}"/>
+  <xacro:property name="lidar_height" value="${37.6 * M}"/>
 
-  <!-- Corpo principal do robô -->
-  <xacro:solid_block_red
+  <xacro:solid_block
     name="payload_base"
     size_x="${payload_base_length}"
     size_y="${payload_base_width}"
     size_z="${payload_base_height}"
   />
 
-<!-- Junta fixa conectando a base de carga ao corpo principal -->
   <xacro:joint_fixed
     parent="body"
     child="payload_base"
@@ -38,10 +37,10 @@
     x="${0.5 * payload_base_length}"
   />
 
-  <xacro:solid_block_black
+  <xacro:solid_block
     name="lidar"
-    size_x="${lidar_radius}"
-    size_y="${lidar_radius}"
+    size_x="${lidar_side}"
+    size_y="${lidar_side}"
     size_z="${lidar_height}"
   />
 
