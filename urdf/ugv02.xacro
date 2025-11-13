@@ -30,15 +30,15 @@
 
   <xacro:property name="body_length" value="${200.0 * M}"/> <!-- Comprimento do corpo -->
   <xacro:property name="body_width" value="${149.0 * M}"/>  <!-- Largura do corpo -->
-  <xacro:property name="body_height" value="${80.0 * M}"/>
+  <xacro:property name="body_height" value="${80.0 * M}"/> <!-- Altura do corpo -->
 
-  <xacro:property name="fender_top_width" value="${body_width + 2.0 * (wheel_thickness + fender_side_gap)}"/>
-  <xacro:property name="fender_side_width" value="${wheel_radius + fender_thickness + fender_top_gap}"/>
+  <xacro:property name="fender_top_width" value="${body_width + 2.0 * (wheel_thickness + fender_side_gap)}"/> <!-- Largura do topo do para-lama -->
+  <xacro:property name="fender_side_width" value="${wheel_radius + fender_thickness + fender_top_gap}"/> <!-- Largura do lado do para-lama -->
 
-  <xacro:property name="fender_side_y_offset" value="${0.5 * (fender_top_width + fender_thickness)}"/>
-  <xacro:property name="fender_side_z_offset" value="${0.5 * (fender_thickness - fender_side_width)}"/>
+  <xacro:property name="fender_side_y_offset" value="${0.5 * (fender_top_width + fender_thickness)}"/> <!-- Deslocamento Y do lado do para-lama -->
+  <xacro:property name="fender_side_z_offset" value="${0.5 * (fender_thickness - fender_side_width)}"/> <!-- Deslocamento Z do lado do para-lama -->
 
-  <xacro:property name="wheel_axle_z_offset" value="${wheel_radius - 0.5 * body_height - ground_clearance}"/>
+  <xacro:property name="wheel_axle_z_offset" value="${wheel_radius - 0.5 * body_height - ground_clearance}"/> <!-- Deslocamento Z do eixo da roda -->  
 
   <xacro:macro
     name="wheels"

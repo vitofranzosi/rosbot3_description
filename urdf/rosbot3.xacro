@@ -74,6 +74,6 @@
   <xacro:joint_fixed
     parent="lidar"
     child="laser"
-    z="${0.5 * lidar_size_z}"
+    z="${0.5 * lidar_side}"
   />
 </robot>
