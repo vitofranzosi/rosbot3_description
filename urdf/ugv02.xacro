@@ -14,22 +14,20 @@
   <xacro:property name="M" value="0.001"/>
 
   <xacro:property name="ground_clearance" value="${23.0 * M}"/> <!-- Distância do solo até a parte mais baixa do corpo -->
-  <xacro:property name="overall_height" value="${103 * M}"/> <!-- Altura total do robô -->
+  <xacro:property name="overall_height" value="${197 * M}"/> <!-- Altura total do robô -->
 
-  <xacro:property name="fender_height" value="${10.0 * M}"/> <!-- Altura dos para-lamas -->
-
-  <xacro:property name="wheel_separation" value="${126.0 * M}"/> <!-- Distância entre as rodas esquerda e direita -->
+  <xacro:property name="wheel_separation" value="${136.0 * M}"/> <!-- Distância entre as rodas esquerda e direita -->
   <xacro:property name="wheel_diameter" value="${84.0 * M}"/> <!-- Diâmetro das rodas -->
-  <xacro:property name="wheelbase" value="${104.0 * M}"/> <!-- Distância entre os eixos dianteiro e traseiro -->
+  <xacro:property name="wheelbase" value="${116.0 * M}"/> <!-- Distância entre os eixos dianteiro e traseiro -->
   <xacro:property name="wheel_radius" value="${0.5 * wheel_diameter}"/> <!-- Raio das rodas -->
-  <xacro:property name="wheel_thickness" value="${50.21 * M}"/>  <!-- Espessura das rodas -->
+  <xacro:property name="wheel_thickness" value="${50.0 * M}"/>  <!-- Espessura das rodas -->
 
   <xacro:property name="fender_length" value="${200.0 * M}"/> <!-- Comprimento dos para-lamas -->
-  <xacro:property name="fender_thickness" value="${3.0 * M}"/> <!-- Espessura dos para-lamas -->
+  <xacro:property name="fender_thickness" value="${5.0 * M}"/> <!-- Espessura dos para-lamas -->
   <xacro:property name="fender_top_width" value="${126.0 * M + wheel_thickness}"/> <!-- Largura do para-lama superior -->
 
   <xacro:property name="body_length" value="${200.0 * M}"/> <!-- Comprimento do corpo do robô -->
-  <xacro:property name="body_width" value="${126.0 * M}"/>
+  <xacro:property name="body_width" value="${126.0 * M}"/> <!-- Largura do corpo do robô -->
   <xacro:property name="body_height" value="${103.0 * M - ground_clearance + 0.004}"/> <!-- Altura do corpo do robô -->
 
   <xacro:property name="wheel_axle_z_offset" value="${wheel_radius - 0.5 * body_height - ground_clearance}"/>  <!-- Deslocamento Z dos eixos das rodas -->
@@ -39,7 +37,7 @@
     name="wheels"
     params="position"
   >
-    <!-- Definição das rodas esquerda, direita e do eixo -->
+
     <xacro:solid_cylinder
       name="wheel_${position}_left"
       length="${wheel_thickness}"
@@ -47,7 +45,6 @@
       roll="${90.0 * DEG}"
     />
 
-    <!-- Definição das rodas direita e do eixo -->
     <xacro:solid_cylinder
       name="wheel_${position}_right"
       length="${wheel_thickness}"
@@ -55,7 +52,6 @@
       roll="${90.0 * DEG}"
     />
 
-    <!-- Definição do eixo das rodas -->
     <xacro:solid_cylinder
       name="wheel_${position}_axle"
       length="${wheel_separation}"
@@ -63,7 +59,6 @@
       roll="${90.0 * DEG}"
     />
 
-    <!-- Juntas contínuas conectando as rodas ao eixo -->
     <xacro:joint_continuous
       name="joint_wheel_${position}_left"
       parent="wheel_${position}_axle"
@@ -72,7 +67,6 @@
       axis="0 1 0"
     />
 
-    <!-- Juntas contínuas conectando as rodas ao eixo -->
     <xacro:joint_continuous
       name="joint_wheel_${position}_right"
       parent="wheel_${position}_axle"
@@ -103,11 +97,26 @@
     material="Red"
   />
 
+  <!-- Definição do cilindro preto frontal -->
+  <xacro:solid_cylinder
+    name="black_cylinder"
+    radius="${0.5 * wheel_diameter}"
+    length="${38.0 * M}"
+    material="Black"
+  />
+
+  <!-- Junta fixa conectando o cilindro preto ao para-lama superior -->
+  <xacro:joint_fixed
+    parent="fenders_top"
+    child="black_cylinder"
+    x="${45.0 * M}"
+  />
+
   <!-- Juntas fixas conectando os componentes -->
   <xacro:joint_fixed
     parent="body"
     child="fenders_top"
-    z="${0.5 * (body_height - fender_thickness)}"
+    z="${body_height*0.5 + fender_thickness*0.5}"
   />
 
   <!-- Juntas fixas conectando os eixos das rodas ao corpo -->
