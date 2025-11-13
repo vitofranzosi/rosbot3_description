@@ -1,48 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
-  Modelo simplificado do Waveshare UGV02 (ROSelito) com 4 rodas
-  - Duas dianteiras e duas traseiras
-  - base_link é o link raiz físico (com massa/inércia)
-  Autor original: Helio Perroni Filho
-  Adaptado por: Vito Rodrigues Franzosi
+  Description of the Waveshare UGV02 mobile base upon which ROSBOT3 is built.
+  Author: Helio Perroni Filho
+  Adapted by: Vito Rodrigues Franzosi
   Date: 06.11.2025
 -->
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro"> <!-- Definição do namespace xacro -->
-  <xacro:include filename="$(find ros_commons)/urdf/domain.xacro"/> <!-- Inclui definições de primitivas geométricas -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find ros_commons)/urdf/domain.xacro"/>
 
   <xacro:property name="M" value="0.001"/>
 
   <xacro:property name="ground_clearance" value="${23.0 * M}"/> <!-- Distância do solo até a parte mais baixa do corpo -->
-  <xacro:property name="overall_height" value="${197 * M}"/> <!-- Altura total do robô -->
+  <xacro:property name="overall_height" value="${141.0 * M}"/> <!-- Altura total do robô -->
 
-  <xacro:property name="wheel_separation" value="${136.0 * M}"/> <!-- Distância entre as rodas esquerda e direita -->
-  <xacro:property name="wheel_diameter" value="${84.0 * M}"/> <!-- Diâmetro das rodas -->
-  <xacro:property name="wheelbase" value="${116.0 * M}"/> <!-- Distância entre os eixos dianteiro e traseiro -->
-  <xacro:property name="wheel_radius" value="${0.5 * wheel_diameter}"/> <!-- Raio das rodas -->
-  <xacro:property name="wheel_thickness" value="${50.0 * M}"/>  <!-- Espessura das rodas -->
+  <xacro:property name="fender_height" value="${10.0 * M}"/>
 
-  <xacro:property name="fender_length" value="${200.0 * M}"/> <!-- Comprimento dos para-lamas -->
-  <xacro:property name="fender_thickness" value="${5.0 * M}"/> <!-- Espessura dos para-lamas -->
-  <xacro:property name="fender_top_width" value="${126.0 * M + wheel_thickness}"/> <!-- Largura do para-lama superior -->
+  <xacro:property name="wheel_separation" value="${149.0 * M}"/> <!-- Distância entre as rodas esquerda e direita -->
+  <xacro:property name="wheel_diameter" value="${84.0 * M}"/> <!-- Diâmetro da roda -->
+  <xacro:property name="wheelbase" value="${200.0 * M - wheel_diameter}"/> <!-- Distância entre os eixos dianteiro e traseiro -->
+  <xacro:property name="wheel_radius" value="${0.5 * wheel_diameter}"/> <!-- Raio da roda -->
+  <xacro:property name="wheel_thickness" value="${50.0 * M}"/>  <!-- Espessura da roda -->
 
-  <xacro:property name="body_length" value="${200.0 * M}"/> <!-- Comprimento do corpo do robô -->
-  <xacro:property name="body_width" value="${126.0 * M}"/> <!-- Largura do corpo do robô -->
-  <xacro:property name="body_height" value="${103.0 * M - ground_clearance + 0.004}"/> <!-- Altura do corpo do robô -->
+  <xacro:property name="fender_length" value="${233.0 * M}"/> <!-- Comprimento dos para-lamas -->
+  <xacro:property name="fender_thickness" value="${3.0 * M}"/>  <!-- Espessura dos para-lamas -->
+  <xacro:property name="fender_top_gap" value="${1.0 * M}"/>  <!-- Espaço entre o topo do para-lama e o corpo -->
+  <xacro:property name="fender_side_gap" value="${5.0 * M}"/> <!-- Espaço entre o lado do para-lama e a roda -->
 
-  <xacro:property name="wheel_axle_z_offset" value="${wheel_radius - 0.5 * body_height - ground_clearance}"/>  <!-- Deslocamento Z dos eixos das rodas -->
+  <xacro:property name="body_length" value="${200.0 * M}"/> <!-- Comprimento do corpo -->
+  <xacro:property name="body_width" value="${149.0 * M}"/>  <!-- Largura do corpo -->
+  <xacro:property name="body_height" value="${80.0 * M}"/>
 
-  <!-- Definição das rodas -->
+  <xacro:property name="fender_top_width" value="${body_width + 2.0 * (wheel_thickness + fender_side_gap)}"/>
+  <xacro:property name="fender_side_width" value="${wheel_radius + fender_thickness + fender_top_gap}"/>
+
+  <xacro:property name="fender_side_y_offset" value="${0.5 * (fender_top_width + fender_thickness)}"/>
+  <xacro:property name="fender_side_z_offset" value="${0.5 * (fender_thickness - fender_side_width)}"/>
+
+  <xacro:property name="wheel_axle_z_offset" value="${wheel_radius - 0.5 * body_height - ground_clearance}"/>
+
   <xacro:macro
     name="wheels"
     params="position"
   >
-
     <xacro:solid_cylinder
       name="wheel_${position}_left"
       length="${wheel_thickness}"
       radius="${wheel_radius}"
       roll="${90.0 * DEG}"
+      material="Black"
     />
 
     <xacro:solid_cylinder
@@ -50,6 +57,7 @@
       length="${wheel_thickness}"
       radius="${wheel_radius}"
       roll="${90.0 * DEG}"
+      material="Black"
     />
 
     <xacro:solid_cylinder
@@ -76,11 +84,9 @@
     />
   </xacro:macro>
 
-  <!-- Instanciação das rodas dianteiras e traseiras -->
   <xacro:wheels position="front"/>
   <xacro:wheels position="rear"/>
 
-  <!-- Definição do corpo do robô -->
   <xacro:solid_block
     name="body"
     size_x="${body_length}"
@@ -88,7 +94,6 @@
     size_z="${body_height}"
   />
 
-  <!-- Definição dos para-lamas -->
   <xacro:solid_block
     name="fenders_top"
     size_x="${fender_length}"
@@ -97,29 +102,12 @@
     material="Red"
   />
 
-  <!-- Definição do cilindro preto frontal -->
-  <xacro:solid_cylinder
-    name="black_cylinder"
-    radius="${0.5 * wheel_diameter}"
-    length="${38.0 * M}"
-    material="Black"
-  />
-
-  <!-- Junta fixa conectando o cilindro preto ao para-lama superior -->
-  <xacro:joint_fixed
-    parent="fenders_top"
-    child="black_cylinder"
-    x="${45.0 * M}"
-  />
-
-  <!-- Juntas fixas conectando os componentes -->
   <xacro:joint_fixed
     parent="body"
     child="fenders_top"
-    z="${body_height*0.5 + fender_thickness*0.5}"
+    z="${0.5 * (body_height + fender_thickness)}"
   />
 
-  <!-- Juntas fixas conectando os eixos das rodas ao corpo -->
   <xacro:joint_fixed
     parent="body"
     child="wheel_front_axle"
@@ -127,7 +115,6 @@
     z="${wheel_axle_z_offset}"
   />
 
-  <!-- Juntas fixas conectando os eixos das rodas ao corpo -->
   <xacro:joint_fixed
     parent="body"
     child="wheel_rear_axle"
@@ -135,7 +122,6 @@
     z="${wheel_axle_z_offset}"
   />
 
-  <!-- Definição do link base_link como o link raiz -->
   <link name="base_link"/>
   <xacro:joint_fixed
     parent="base_link"

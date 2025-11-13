@@ -2,8 +2,8 @@
 
 <!--
   Description of the ROSBOT3 robot.
-  Autor original: Helio Perroni Filho
-  Adaptado por: Vito Rodrigues Franzosi
+  Author: Helio Perroni Filho
+  Adapted by: Vito Rodrigues Franzosi
   Date: 06.11.2025
 -->
 
@@ -12,23 +12,42 @@
 
   <xacro:property name="payload_base_length" value="${10.0 * M}"/>
   <xacro:property name="payload_base_width" value="${10.0 * M}"/>
-  <xacro:property name="payload_base_height" value="${94.0 * M}"/>
+  <xacro:property name="payload_base_height" value="${120.0 * M}"/>
 
-  <xacro:property name="lidar_size_x" value="${20.0 * M}"/>  <!-- comprimento -->
-  <xacro:property name="lidar_size_y" value="${80.0 * M}"/>   <!-- largura -->
-  <xacro:property name="lidar_size_z" value="${20.0 * M}"/>   <!-- altura -->
+  <xacro:property name="lidar_side" value="${20.0 * M}"/>
+  <xacro:property name="lidar_height" value="${80.0 * M}"/>
+
+  <xacro:property name="cylinder_base_diameter" value="${70.0 * M}"/>
+  <xacro:property name="cylinder_base_height" value="${40.0 * M}"/>
+  <xacro:property name="cylinder_base_radius" value="${cylinder_base_diameter * 0.5}"/>
+
+
+  <xacro:solid_cylinder
+    name="cylinder_base"
+    length="${cylinder_base_height}"
+    radius="${cylinder_base_radius}"
+    material="Black"
+  />
   
+  <xacro:joint_fixed
+    parent="fenders_top"
+    child="cylinder_base"
+  />
+
+
   <xacro:solid_block
     name="payload_base"
     size_x="${payload_base_length}"
     size_y="${payload_base_width}"
     size_z="${payload_base_height}"
+    pitch="${30.0 * DEG}"
   />
 
   <xacro:joint_fixed
     parent="fenders_top"
     child="payload_base"
-    x="${-50.0 * M}"
+    x="${(-35.0 * M)}"
+    z="${0.5 * (body_height + fender_thickness)}"
   />
 
   <xacro:camera_link name="camera_front"/>
@@ -39,15 +58,16 @@
 
   <xacro:solid_block
     name="lidar"
-    size_x="${lidar_size_x}"
-    size_y="${lidar_size_y}"
-    size_z="${lidar_size_z}"
+    size_x="${lidar_side}"
+    size_y="${lidar_height}"
+    size_z="${lidar_side}"
   />
 
   <xacro:joint_fixed
     parent="payload_base"
     child="lidar"
-    z="${payload_base_height * 0.5 + lidar_size_z * 0.5}"
+    x="${payload_base_width + lidar_side}"
+    z="${0.5 * payload_base_height}"
   />
 
   <link name="laser"/>
